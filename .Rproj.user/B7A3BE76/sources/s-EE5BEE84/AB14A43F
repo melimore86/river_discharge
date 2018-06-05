@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527102804779.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "1147329095",
+    "id" : "AB14A43F",
+    "lastKnownWriteTime" : 1527103867,
+    "last_content_update" : 1527103868022,
+    "path" : "T:/Oyster Project/river_discharge/Flow summaries/River/river_dishcarge/app.R",
+    "project_path" : "river_dishcarge/app.R",
+    "properties" : {
+        "cursorPosition" : "9,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

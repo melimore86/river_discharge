@@ -1,0 +1,12 @@
+name: river_dishcarge
+title: river_dishcarge
+username:
+account: oysterprojectck
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 347258
+bundleId: 1413145
+url: https://oysterprojectck.shinyapps.io/river_dishcarge/
+when: 1528224969.37045
+asMultiple: FALSE
+asStatic: FALSE

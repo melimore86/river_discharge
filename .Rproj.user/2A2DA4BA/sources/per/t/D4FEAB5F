@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1525361855506.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "2410154838",
+    "id" : "D4FEAB5F",
+    "lastKnownWriteTime" : 1525297476,
+    "last_content_update" : 1525297476,
+    "path" : "T:/Oyster Project/river_discharge/Flow summaries/River/quantile_suw_river.R",
+    "project_path" : "quantile_suw_river.R",
+    "properties" : {
+        "cursorPosition" : "166,0",
+        "scrollLine" : "138"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

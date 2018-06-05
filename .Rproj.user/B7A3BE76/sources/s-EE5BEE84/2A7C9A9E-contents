@@ -1,0 +1,256 @@
+library("shiny")
+library("tidyverse")
+library("lubridate")
+library("shinythemes")
+library("ggplot2")
+library("scales")
+library("dplyr")
+library("marelac")
+library("zoo")
+
+LC_WQ1 <- read.csv("data/LC_WQ1_All_Days_R.csv", header= T)
+LC_WQ2 <- read.csv("data/LC_WQ2_All_Days_R.csv", header= T)
+LC_WQ3 <- read.csv("data/LC_WQ3_All_Days_R.csv", header= T)
+LC_WQ4 <- read.csv("data/LC_WQ4_All_Days_R.csv", header= T)
+LC_WQ5 <- read.csv("data/LC_WQ5_All_Days_R.csv", header= T)
+LC_WQ6 <- read.csv("data/LC_WQ6_All_Days_R.csv", header= T)
+LC_WQ7 <- read.csv("data/LC_WQ7_All_Days_R.csv", header= T)
+LC_WQ8 <- read.csv("data/LC_WQ8_All_Days_R.csv", header= T)
+LC_WQ9 <- read.csv("data/LC_WQ9_All_Days_R.csv", header= T)
+
+colnames(LC_WQ1) <- c("Date", "Sound/Pressure", "Temperature", "Conductivity")
+colnames(LC_WQ3) <- c("Date", "Sound/Pressure", "Temperature", "Conductivity")
+colnames(LC_WQ2) <- c("Date", "Temperature", "Salinity", "Conductivity", "Sound/Pressure")
+colnames(LC_WQ4) <- c("Date", "Temperature", "Salinity", "Conductivity", "Sound/Pressure")
+colnames(LC_WQ5) <- c("Date", "Temperature", "Salinity", "Conductivity", "Sound/Pressure")
+colnames(LC_WQ6) <- c("Date", "Temperature", "Salinity", "Conductivity", "Sound/Pressure")
+colnames(LC_WQ7) <- c("Date", "Temperature", "Salinity", "Conductivity", "Sound/Pressure")
+colnames(LC_WQ8) <- c("Date", "Temperature", "Salinity", "Conductivity", "Sound/Pressure")
+colnames(LC_WQ9) <- c("Date", "Temperature", "Salinity", "Conductivity", "Sound/Pressure")
+
+LC_WQ1$Date <- as.POSIXct(as.Date(LC_WQ1$Date,origin= "1899-12-30"))
+LC_WQ2$Date <- as.POSIXct(as.Date(LC_WQ2$Date,origin= "1899-12-30"))
+LC_WQ3$Date <- as.POSIXct(as.Date(LC_WQ3$Date,origin= "1899-12-30"))
+LC_WQ4$Date <- as.POSIXct(as.Date(LC_WQ4$Date,origin= "1899-12-30"))
+LC_WQ5$Date <- as.POSIXct(as.Date(LC_WQ5$Date,origin= "1899-12-30"))
+LC_WQ6$Date <- as.POSIXct(as.Date(LC_WQ6$Date,origin= "1899-12-30"))
+LC_WQ7$Date <- as.POSIXct(as.Date(LC_WQ7$Date,origin= "1899-12-30"))
+LC_WQ8$Date <- as.POSIXct(as.Date(LC_WQ8$Date,origin= "1899-12-30"))
+LC_WQ9$Date <- as.POSIXct(as.Date(LC_WQ9$Date,origin= "1899-12-30"))
+
+standard= 42.914
+
+LC_WQ1$Salinity <- convert_RtoS(LC_WQ1$Conductivity/standard, 
+                                t= LC_WQ1$Temperature, p= 0)
+LC_WQ2$Salinity <- convert_RtoS(LC_WQ2$Conductivity/standard, 
+                                t= LC_WQ2$Temperature, p=0)
+LC_WQ3$Salinity <- convert_RtoS(LC_WQ3$Conductivity/standard, 
+                                t= LC_WQ3$Temperature, p= 0)
+LC_WQ4$Salinity <- convert_RtoS(LC_WQ4$Conductivity/standard, 
+                                t= LC_WQ4$Temperature, p=0)
+LC_WQ5$Salinity <- convert_RtoS(LC_WQ5$Conductivity/standard, 
+                                t= LC_WQ5$Temperature, p=0)
+LC_WQ6$Salinity <- convert_RtoS(LC_WQ6$Conductivity/standard, 
+                                t= LC_WQ6$Temperature, p=0)
+LC_WQ7$Salinity <- convert_RtoS(LC_WQ7$Conductivity/standard, 
+                                t= LC_WQ7$Temperature, p=0)
+LC_WQ8$Salinity <- convert_RtoS(LC_WQ8$Conductivity/standard, 
+                                t= LC_WQ8$Temperature, p=0)
+LC_WQ9$Salinity <- convert_RtoS(LC_WQ9$Conductivity/standard, 
+                                t= LC_WQ9$Temperature, p=0)
+
+LC_WQ1$Site<-(LC_WQ1$Site="1")
+LC_WQ2$Site<-(LC_WQ2$Site="2")
+LC_WQ3$Site<-(LC_WQ3$Site="3")
+LC_WQ4$Site<-(LC_WQ4$Site="4")
+LC_WQ5$Site<-(LC_WQ5$Site="5")
+LC_WQ6$Site<-(LC_WQ6$Site="6")
+LC_WQ7$Site<-(LC_WQ7$Site="7")
+LC_WQ8$Site<-(LC_WQ8$Site="8")
+LC_WQ9$Site<-(LC_WQ9$Site="9")
+
+sensor<- rbind (LC_WQ1, LC_WQ2, LC_WQ3, LC_WQ4, LC_WQ5, LC_WQ6, LC_WQ7, LC_WQ8, LC_WQ9)
+
+
+###Lakewatch Data
+lab <- read.csv("data/discrete_measurement.csv", header= T)
+
+colnames(lab) <- c("Site", "Date", "Time", "Sun_code", "Phosphorus", "Nitrogen", "Chlorophyll", "Secchi", "Color", "DO", "Temperature","Conductivity", "Salinity", "Depth", "Sensor_Type")
+
+#lab$Date<- paste(lab$oldDate, lab$Time)
+#lab$Date <- with(lab, as.POSIXct(paste(lab$oldDate, lab$Time), format="%Y-%m-%d %H:%M"))
+#lab$Date <- as.POSIXct(paste(lab$Date, lab$Time), format="%Y-%m-%d %H:%M")
+
+lab$Secchi<- paste(lab$Depth,lab$Secchi)
+
+lab$Secchi<-as.numeric(gsub('NA','',lab$Secchi))
+
+lab$Date <- as.POSIXct(as.Date(lab$Date,origin= "1899-12-30"))
+
+
+
+
+#rsconnect::setAccountInfo(name='oysterprojectck',
+#                          token='1A19DA8F2160BF918A80DC9FA8CA6FC4',
+#                          secret='fJ5CyWFDDF/tDq45m8S7Daii5G0XtcfkHWoOwBjN')
+
+#rsconnect::deployApp('T:/Oyster Project/mels_git/mels-shiny/rsconnect/shinyapps.io/oysterprojectck')
+
+
+
+#### Front 
+
+ui <- fluidPage(theme = shinytheme("yeti"),
+
+
+  sidebarLayout(
+    sidebarPanel(
+      
+    
+      h3("Continuous Data"),
+    
+      selectInput("site1", label= h4("Site"), 
+                  choices=unique(sensor$Site)),
+      
+      selectInput("site2", label=h4("Comparison"), 
+                  choices=c("None" = 0,unique(sensor$Site))),
+      
+      dateRangeInput("date",
+                     label =h4('Date range'),
+                     start = "2017-01-01" , end = Sys.Date() + 7),
+
+      
+      radioButtons("variable",
+                         label = h4("Observations"),
+                         choices = list("Salinity (ppt)" = "Salinity",
+                                        "Conductivity (mS/cm)"= "Conductivity",
+                                        "Temperature (C)" = "Temperature"),
+                                         selected = "Salinity"),
+
+    h3("Discrete Data"),
+    
+    
+    #selectInput("site3", label= h4("Site"), 
+    #            choices=unique(lab$Site)),
+    
+    #selectInput("site4", label=h4("Comparison"), 
+    #            choices=c("None" = 0,unique(lab$Site))),
+    
+    radioButtons("variable2",
+                       label = h4("Observations"),
+                       choices = list("Salinity (ppt)" = "Salinity",
+                                      "Conductivity (mS/cm)"= "Conductivity",
+                                      "Temperature (C)" = "Temperature",
+                                      "Phosphorus (ug/L)" = "Phosphorus",
+                                      "Nitrogen (ug/L)" = "Nitrogen",
+                                      "Color (Pt-Co Units)" = "Color",
+                                      "Secchi (m)" = "Secchi"),
+                       selected = c("Salinity"))),
+    
+    
+  
+    mainPanel(
+      plotOutput("sensorplot"),
+      plotOutput("labplot"))
+  
+     )
+   )
+  
+
+server <- shinyServer(function(input, output, session) {
+    
+  sensorplot <- reactive({
+
+      sensor <- sensor %>% 
+        filter(Site == input$site1 | Site == input$site2,
+               Date >= input$date[1] & Date <= input$date[2]) %>% 
+               select(Site, Date, input$variable) %>% 
+                 gather("Variable", "Measurement", input$variable)
+    
+    ggplot(sensor, aes(x = Date, y = Measurement)) +
+      geom_point() +
+      scale_x_datetime(
+        breaks = date_breaks("month") ,
+        labels = date_format("%m/%Y")) +
+      theme(panel.border = element_rect(color = "black", size = 0.5, fill = NA, linetype="solid")) +
+      facet_wrap(~Site, ncol = 1, scales = "free_y")
+    
+    
+    if (input$site2 == 0) {
+          ggplot(sensor, aes(x = Date, y = Measurement)) +
+          geom_point() +
+          scale_x_datetime(
+            breaks = date_breaks("month") ,
+            labels = date_format("%m/%Y")) +
+        theme(panel.border = element_rect(color = "black", size = 0.5, fill = NA, linetype="solid"),
+              axis.text.x=element_text(angle=90,hjust=1,vjust=0.5), text = element_text(size=12)) +
+              facet_wrap(~Site, ncol = 1, scales = "free_y") +
+              ylab("")
+      
+         } else {
+            ggplot(sensor, aes(x = Date, y = Measurement)) +
+            geom_point() +
+            scale_x_datetime(
+               breaks = date_breaks("month") ,
+               labels = date_format("%m/%Y")) +
+            theme(panel.border = element_rect(color = "black", size = 0.5, fill = NA, 
+            linetype="solid"),axis.text.x=element_text(angle=90,hjust=1,vjust=0.5), 
+            text = element_text(size=12)) +
+            facet_wrap(~Site, ncol = 1, scales = "free_y") +
+            ylab("")
+         }
+    
+    })
+  
+labplot <- reactive({
+    
+    lab <- lab %>% 
+      filter(Site == input$site1 | Site == input$site2,
+             Date >= input$date[1] & Date <= input$date[2]) %>% 
+             select(Site, Date, input$variable2, Sensor_Type) %>% 
+               gather("Variable", "Measurement", input$variable2)
+  
+    ggplot(lab, aes(x = Date, y = Measurement)) +
+      geom_point() +
+      scale_x_datetime(
+        breaks = date_breaks("month") ,
+        labels = date_format("%m/%Y")) +
+      theme(panel.border = element_rect(color = "black", size = 0.5, fill = NA, linetype="solid")) +
+      facet_wrap(~ Site + Sensor_Type, ncol = 2, scales = "free_y")
+    
+    
+    if (input$site2 == 0) {
+      ggplot(lab, aes(x = Date, y = Measurement)) +
+        geom_point() +
+        scale_x_datetime(
+          breaks = date_breaks("month") ,
+          labels = date_format("%m/%Y")) +
+        theme(panel.border = element_rect(color = "black", size = 0.5, fill = NA, linetype="solid"),
+              axis.text.x=element_text(angle=90,hjust=1,vjust=0.5), text = element_text(size=12)) +
+        facet_wrap(~ Site + Sensor_Type, ncol = 2, scales = "free_y") +
+        ylab("")
+      
+    } else {
+      ggplot(lab, aes(x = Date, y = Measurement)) +
+        geom_point() +
+        scale_x_datetime(
+          breaks = date_breaks("month") ,
+          labels = date_format("%m/%Y")) +
+        theme(panel.border = element_rect(color = "black", size = 0.5, fill = NA, 
+                                          linetype="solid"),axis.text.x=element_text(angle=90,hjust=1,vjust=0.5), 
+              text = element_text(size=12)) +
+        facet_wrap(~ Site + Sensor_Type, ncol = 2, scales = "free_y") +
+        ylab("")
+    }
+  })
+  
+  
+  output$sensorplot<-renderPlot({sensorplot()})
+  
+  
+  output$labplot<-renderPlot({labplot()})
+
+})
+
+# Run the application 
+shinyApp(ui = ui, server = server)

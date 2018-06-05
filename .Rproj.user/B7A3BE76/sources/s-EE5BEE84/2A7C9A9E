@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527104024286.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "4030751951",
+    "id" : "2A7C9A9E",
+    "lastKnownWriteTime" : 1527104240,
+    "last_content_update" : 1527104240739,
+    "path" : "T:/Oyster Project/mels_git/mels-shiny/app.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "8,7",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

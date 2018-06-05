@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1525362152051.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "80196731",
+    "id" : "163FBEC1",
+    "lastKnownWriteTime" : 1353871454,
+    "last_content_update" : 1353871454,
+    "path" : "T:/Oyster Project/river_discharge/Flow summaries/River/R_CODE/Hydro_Quartile_Plot_Apalach.r",
+    "project_path" : "R_CODE/Hydro_Quartile_Plot_Apalach.r",
+    "properties" : {
+        "cursorPosition" : "5,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
