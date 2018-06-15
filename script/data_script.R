@@ -26,8 +26,6 @@ dis$Month <- month(dis$Date, label=TRUE)
 dis$Month2 <- month(dis$Date, label=FALSE)
 
 
-write.csv(dis, "dis.csv",row.names=FALSE)
-
 dis_mean_year<-  aggregate( Discharge ~ Year, dis, mean )
 dis_mean_month<-  aggregate( Discharge ~ Month, dis, mean )
 dis_mean_date<-  aggregate( Discharge ~ Date, dis, mean )
